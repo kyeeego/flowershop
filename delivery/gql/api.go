@@ -4,6 +4,7 @@ import (
 	"github.com/graphql-go/graphql"
 	gqlhandler "github.com/graphql-go/graphql-go-handler"
 	"github.com/kyeeego/flowershop/utils"
+	"net/http"
 )
 
 type Endpoint interface {
@@ -12,10 +13,10 @@ type Endpoint interface {
 }
 
 type Api struct {
-	Handler *gqlhandler.Handler
+	Handler http.Handler
 }
 
-func New(endpoints []Endpoint) (*Api, error) {
+func New(endpoints ...Endpoint) (*Api, error) {
 
 	queries := graphql.Fields{}
 	mutations := graphql.Fields{}
@@ -30,9 +31,11 @@ func New(endpoints []Endpoint) (*Api, error) {
 	schema, err := graphql.NewSchema(
 		graphql.SchemaConfig{
 			Query: graphql.NewObject(graphql.ObjectConfig{
+				Name:   "query",
 				Fields: queries,
 			}),
 			Mutation: graphql.NewObject(graphql.ObjectConfig{
+				Name:   "mutation",
 				Fields: mutations,
 			}),
 		},
@@ -46,7 +49,10 @@ func New(endpoints []Endpoint) (*Api, error) {
 		Pretty: true,
 	})
 
+	handler := http.NewServeMux()
+	handler.Handle("/gql", h)
+
 	return &Api{
-		Handler: h,
+		Handler: handler,
 	}, nil
 }

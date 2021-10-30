@@ -7,8 +7,8 @@ var GqlPurchase = graphql.NewObject(
 		Name: "Purchase",
 		Fields: graphql.Fields{
 			"id":            {Type: graphql.ID},
-			"bouquet":       {Type: GqlBouquet},
-			"customer":      {Type: GqlCustomer},
+			"bouquetId":     {Type: graphql.ID},
+			"customerId":    {Type: graphql.ID},
 			"price":         {Type: graphql.Float},
 			"serviceIncome": {Type: graphql.Float},
 		},

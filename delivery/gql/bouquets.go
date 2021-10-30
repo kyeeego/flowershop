@@ -5,9 +5,9 @@ import (
 	"github.com/kyeeego/flowershop/domain"
 )
 
-type bouquet struct{}
+type Bouquet struct{}
 
-func (bouquet) initQueries() graphql.Fields {
+func (Bouquet) initQueries() graphql.Fields {
 	return graphql.Fields{
 		"bouquet": &graphql.Field{
 			Type: domain.GqlBouquet,
@@ -27,7 +27,7 @@ func (bouquet) initQueries() graphql.Fields {
 	}
 }
 
-func (bouquet) initMutations() graphql.Fields {
+func (Bouquet) initMutations() graphql.Fields {
 	return graphql.Fields{
 		"createBouquet": &graphql.Field{
 			Type: domain.GqlBouquet,

@@ -10,7 +10,7 @@ var GqlBouquet = graphql.NewObject(
 			"name":     {Type: graphql.String},
 			"price":    {Type: graphql.Float},
 			"photoUrl": {Type: graphql.String},
-			"seller":   {Type: GqlSeller},
+			"sellerId": {Type: graphql.ID},
 		},
 	},
 )

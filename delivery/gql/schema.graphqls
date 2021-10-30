@@ -1,7 +1,7 @@
 type Query {
-    bouquet(id: ID!): Bouquet
-    seller(id: ID!): Seller
-    customer(id: ID!): customer
+    Bouquet(id: ID!): Bouquet
+    Seller(id: ID!): Seller
+    Customer(id: ID!): Customer
 
     bouquets: [Bouquet!]!
     sellers: [Seller!]!
@@ -9,8 +9,8 @@ type Query {
 }
 
 type Mutation {
-    createCustomer(in: CreateCustomerDto!): customer!
-    updateCustomer(in: UpdateCustomerDto!): customer!
+    createCustomer(in: CreateCustomerDto!): Customer!
+    updateCustomer(in: UpdateCustomerDto!): Customer!
     deleteCustomer(id: ID!): Boolean
 
     createBouquet(in: CreateBouquetDto!): Bouquet!
@@ -65,7 +65,7 @@ type Bouquet {
     name: String!
     price: Int!
     photoUrl: String!
-    seller: Seller!
+    Seller: Seller!
 }
 
 type Seller {
@@ -77,7 +77,7 @@ type Seller {
     soldBouquetsAmount: Int!
 }
 
-type customer {
+type Customer {
     id: ID!
     name: String!
     email: String!
@@ -86,8 +86,8 @@ type customer {
 
 type Purchase {
     id: ID!
-    bouquet: Bouquet!
-    customer: customer!
+    Bouquet: Bouquet!
+    Customer: Customer!
     price: Int!
     serviceIncome: Int!
 }

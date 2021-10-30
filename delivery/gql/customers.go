@@ -5,9 +5,9 @@ import (
 	"github.com/kyeeego/flowershop/domain"
 )
 
-type customer struct{}
+type Customer struct{}
 
-func (customer) initQueries() graphql.Fields {
+func (Customer) initQueries() graphql.Fields {
 	return graphql.Fields{
 		"customer": &graphql.Field{
 			Type: domain.GqlCustomer,
@@ -21,7 +21,7 @@ func (customer) initQueries() graphql.Fields {
 	}
 }
 
-func (customer) initMutations() graphql.Fields {
+func (Customer) initMutations() graphql.Fields {
 	return graphql.Fields{
 		"createCustomer": &graphql.Field{
 			Type: domain.GqlCustomer,

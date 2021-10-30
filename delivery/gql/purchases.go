@@ -5,9 +5,9 @@ import (
 	"github.com/kyeeego/flowershop/domain"
 )
 
-type purchase struct{}
+type Purchase struct{}
 
-func (purchase) initQueries() graphql.Fields {
+func (Purchase) initQueries() graphql.Fields {
 	return graphql.Fields{
 		"purchases": &graphql.Field{
 			Type: graphql.NewList(domain.GqlPurchase),
@@ -21,7 +21,7 @@ func (purchase) initQueries() graphql.Fields {
 	}
 }
 
-func (purchase) initMutations() graphql.Fields {
+func (Purchase) initMutations() graphql.Fields {
 	return graphql.Fields{
 		"purchaseBouquet": &graphql.Field{
 			Type: graphql.Boolean,
