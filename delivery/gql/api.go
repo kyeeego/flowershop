@@ -3,6 +3,7 @@ package gql
 import (
 	"github.com/graphql-go/graphql"
 	gqlhandler "github.com/graphql-go/graphql-go-handler"
+	"github.com/kyeeego/flowershop/service"
 	"github.com/kyeeego/flowershop/utils"
 	"net/http"
 )
@@ -10,19 +11,22 @@ import (
 type Endpoint interface {
 	initQueries() graphql.Fields
 	initMutations() graphql.Fields
+	initServices(serv *service.Service)
 }
 
 type Api struct {
 	Handler http.Handler
 }
 
-func New(endpoints ...Endpoint) (*Api, error) {
+func New(service *service.Service, endpoints ...Endpoint) (*Api, error) {
 
 	queries := graphql.Fields{}
 	mutations := graphql.Fields{}
 	for _, e := range endpoints {
 		eq := e.initQueries()
 		em := e.initMutations()
+
+		e.initServices(service)
 
 		queries = utils.MergeGqlFieldMaps(queries, eq)
 		mutations = utils.MergeGqlFieldMaps(mutations, em)

@@ -34,7 +34,7 @@ func Init() (*Config, error) {
 
 	return &Config{
 		DbName:     os.Getenv("DB_NAME"),
-		DbHost:     os.Getenv("DB_PORT"),
+		DbHost:     os.Getenv("DB_HOST"),
 		DbUsername: os.Getenv("DB_USER"),
 		DbPort:     dbPort,
 		DbPassword: os.Getenv("DB_PASSWORD"),

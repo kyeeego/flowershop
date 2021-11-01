@@ -1,7 +1,16 @@
 package domain
 
-import "github.com/graphql-go/graphql"
+import (
+	"github.com/graphql-go/graphql"
+	"github.com/jinzhu/gorm"
+)
 
+type CustomerModel struct {
+	gorm.Model
+	Name      string
+	Email     string
+	Purchases []PurchaseModel `gorm:"foreignKey:CustomerId"`
+}
 
 var GqlCustomer = graphql.NewObject(
 	graphql.ObjectConfig{
@@ -16,10 +25,10 @@ var GqlCustomer = graphql.NewObject(
 )
 
 type CustomerDto struct {
-	Id        uint32         `json:"id"`
-	Name      string         `json:"name"`
-	Email     string         `json:"email"`
-	Purchases []*PurchaseDto `json:"purchases"`
+	ID        uint          `json:"id" copier:"must"`
+	Name      string        `json:"name" copier:"must"`
+	Email     string        `json:"email" copier:"must"`
+	Purchases []PurchaseDto `json:"purchases" copier:"must"`
 }
 
 var GqlCreateCustomerDto = graphql.NewObject(
@@ -49,7 +58,7 @@ var GqlUpdateCustomerDto = graphql.NewObject(
 )
 
 type UpdateCustomerDto struct {
-	Id    uint32 `json:"id"`
+	ID    uint   `json:"id"`
 	Name  string `json:"name,omitempty"`
 	Email string `json:"email,omitempty"`
 }

@@ -1,54 +1,93 @@
 package gql
 
 import (
+	"errors"
 	"github.com/graphql-go/graphql"
 	"github.com/kyeeego/flowershop/domain"
+	"github.com/kyeeego/flowershop/service"
 )
 
-type Customer struct{}
+type Customer struct{ service *service.Service }
 
-func (Customer) initQueries() graphql.Fields {
+func (c *Customer) initServices(serv *service.Service) {
+	c.service = serv
+}
+
+func (c Customer) ResolveOne(p graphql.ResolveParams) (interface{}, error) {
+	id, ok := p.Args["id"].(uint)
+	if !ok {
+		return nil, errors.New("invalid id argument")
+	}
+
+	return c.service.Customer.GetById(id)
+}
+
+func (c Customer) ResolveCreate(p graphql.ResolveParams) (interface{}, error) {
+	dto, ok := p.Args["in"].(domain.CreateCustomerDto)
+	if !ok {
+		return nil, errors.New("invalid in argument")
+	}
+
+	return c.service.Customer.Create(dto)
+}
+
+func (c Customer) ResolveUpdate(p graphql.ResolveParams) (interface{}, error) {
+	dto, ok := p.Args["in"].(domain.UpdateCustomerDto)
+	if !ok {
+		return nil, errors.New("invalid in argument")
+	}
+
+	return c.service.Customer.Update(dto)
+}
+
+func (c Customer) ResolveDelete(p graphql.ResolveParams) (interface{}, error) {
+	id, ok := p.Args["id"].(uint)
+	if !ok {
+		return nil, errors.New("invalid id argument")
+	}
+
+	err := c.service.Customer.Delete(id)
+	if err != nil {
+		return false, err
+	}
+
+	return true, nil
+}
+
+func (c Customer) initQueries() graphql.Fields {
 	return graphql.Fields{
 		"customer": &graphql.Field{
 			Type: domain.GqlCustomer,
 			Args: graphql.FieldConfigArgument{
 				"id": &graphql.ArgumentConfig{Type: graphql.ID},
 			},
-			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-				panic("Not yet implemented")
-			},
+			Resolve: c.ResolveOne,
 		},
 	}
 }
 
-func (Customer) initMutations() graphql.Fields {
+func (c Customer) initMutations() graphql.Fields {
 	return graphql.Fields{
 		"createCustomer": &graphql.Field{
 			Type: domain.GqlCustomer,
 			Args: graphql.FieldConfigArgument{
 				"in": &graphql.ArgumentConfig{Type: domain.GqlCreateCustomerDto},
 			},
-			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-				panic("Not yet implemented")
-			},
+			Resolve: c.ResolveCreate,
 		},
 		"updateCustomer": &graphql.Field{
 			Type: domain.GqlCustomer,
 			Args: graphql.FieldConfigArgument{
 				"in": &graphql.ArgumentConfig{Type: domain.GqlUpdateCustomerDto},
 			},
-			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-				panic("not yet impl")
-			},
+			Resolve: c.ResolveUpdate,
 		},
 		"deleteCustomer": &graphql.Field{
 			Type: graphql.Boolean,
 			Args: graphql.FieldConfigArgument{
 				"id": &graphql.ArgumentConfig{Type: graphql.ID},
 			},
-			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-				panic("Not yet impl")
-			},
+			Resolve: c.ResolveDelete,
 		},
 	}
 }

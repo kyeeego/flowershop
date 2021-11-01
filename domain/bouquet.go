@@ -1,6 +1,17 @@
 package domain
 
-import "github.com/graphql-go/graphql"
+import (
+	"github.com/graphql-go/graphql"
+	"github.com/jinzhu/gorm"
+)
+
+type BouquetModel struct {
+	gorm.Model
+	Name     string
+	Price    float64
+	PhotoUrl string
+	SellerId uint
+}
 
 var GqlBouquet = graphql.NewObject(
 	graphql.ObjectConfig{
@@ -16,7 +27,7 @@ var GqlBouquet = graphql.NewObject(
 )
 
 type BouquetDto struct {
-	Id       uint32     `json:"id"`
+	ID       uint       `json:"id"`
 	Name     string     `json:"name"`
 	Price    float64    `json:"price"`
 	PhotoUrl string     `json:"photo_url"`
@@ -39,7 +50,7 @@ type CreateBouquetDto struct {
 	Name     string  `json:"name"`
 	Price    float64 `json:"price"`
 	PhotoUrl string  `json:"photo_url"`
-	SellerId uint32  `json:"seller_id"`
+	SellerId uint    `json:"seller_id"`
 }
 
 var GqlUpdateBouquetDto = graphql.NewObject(
@@ -55,7 +66,7 @@ var GqlUpdateBouquetDto = graphql.NewObject(
 )
 
 type UpdateBouquetDto struct {
-	Id       uint32  `json:"id"`
+	ID       uint    `json:"id"`
 	Name     string  `json:"name,omitempty"`
 	Price    float64 `json:"price,omitempty"`
 	PhotoUrl string  `json:"photo_url,omitempty"`

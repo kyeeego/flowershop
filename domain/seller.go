@@ -2,7 +2,17 @@ package domain
 
 import (
 	"github.com/graphql-go/graphql"
+	"github.com/jinzhu/gorm"
+	"time"
 )
+
+type SellerModel struct {
+	gorm.Model
+	ShopName     string
+	PhotoUrl     string
+	Bouquets     []BouquetModel `gorm:"foreignKey:SellerId"`
+	SoldBouquets int
+}
 
 var GqlSeller = graphql.NewObject(
 	graphql.ObjectConfig{
@@ -19,10 +29,10 @@ var GqlSeller = graphql.NewObject(
 )
 
 type SellerDto struct {
-	Id           uint32        `json:"id"`
+	ID           uint          `json:"id"`
 	ShopName     string        `json:"shop_name"`
 	PhotoUrl     string        `json:"photo_url"`
-	CreatedDate  int32         `json:"created_date"`
+	CreatedDate  *time.Time    `json:"created_date"`
 	Bouquets     []*BouquetDto `json:"bouquets"`
 	SoldBouquets int           `json:"sold_bouquets"`
 }
@@ -54,7 +64,7 @@ var GqlUpdateSellerDto = graphql.NewObject(
 )
 
 type UpdateSellerDto struct {
-	Id       uint32 `json:"id"`
+	ID       uint   `json:"id"`
 	ShopName string `json:"shop_name,omitempty"`
 	PhotoUrl string `json:"photo_url,omitempty"`
 }
