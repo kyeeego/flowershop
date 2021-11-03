@@ -7,7 +7,7 @@ import (
 )
 
 type SellerServ struct {
-	r *repository.Repository
+	repository *repository.Repository
 }
 
 func newSellerService(r *repository.Repository) *SellerServ {
@@ -15,7 +15,7 @@ func newSellerService(r *repository.Repository) *SellerServ {
 }
 
 func (s SellerServ) GetById(id uint) (domain.SellerDto, error) {
-	model, err := s.r.Seller.FindById(id)
+	model, err := s.repository.Seller.FindById(id)
 	if err != nil {
 		return domain.SellerDto{}, err
 	}
@@ -27,7 +27,7 @@ func (s SellerServ) GetById(id uint) (domain.SellerDto, error) {
 
 func (s SellerServ) GetAll() ([]domain.SellerDto, error) {
 	var dtos []domain.SellerDto
-	models, err := s.r.Seller.FindAll()
+	models, err := s.repository.Seller.FindAll()
 	if err != nil {
 		return nil, err
 	}
@@ -45,7 +45,7 @@ func (s SellerServ) Create(dto domain.CreateSellerDto) (domain.SellerDto, error)
 		SoldBouquets: 0,
 	}
 
-	err := s.r.Seller.Insert(&model)
+	err := s.repository.Seller.Insert(&model)
 	if err != nil {
 		return domain.SellerDto{}, nil
 	}
@@ -56,7 +56,7 @@ func (s SellerServ) Create(dto domain.CreateSellerDto) (domain.SellerDto, error)
 }
 
 func (s SellerServ) Update(dto domain.UpdateSellerDto) (domain.SellerDto, error) {
-	model, err := s.r.Seller.FindById(dto.ID)
+	model, err := s.repository.Seller.FindById(dto.ID)
 	if err != nil {
 		return domain.SellerDto{}, err
 	}
@@ -72,9 +72,9 @@ func (s SellerServ) Update(dto domain.UpdateSellerDto) (domain.SellerDto, error)
 		return domain.SellerDto{}, err
 	}
 
-	return res, s.r.Seller.Update(model)
+	return res, s.repository.Seller.Update(model)
 }
 
 func (s SellerServ) Delete(id uint) error {
-	return s.r.Seller.Delete(id)
+	return s.repository.Seller.Delete(id)
 }

@@ -2,44 +2,26 @@ package config
 
 import (
 	"os"
-	"strconv"
 )
 
 type Config struct {
-	DbName     string
-	DbHost     string
-	DbPort     int
-	DbUsername string
-	DbPassword string
+	DBName     string
+	DBHost     string
+	DBPort     string
+	DBUsername string
+	DBPassword string
 
-	Port int
-	Prod bool
+	Port string
 }
 
-func Init() (*Config, error) {
-	port, err := strconv.Atoi(os.Getenv("PORT"))
-	if err != nil {
-		port = 8081
-	}
-
-	dbPort, err := strconv.Atoi(os.Getenv("DB_PORT"))
-	if err != nil {
-		return nil, err
-	}
-
-	prod, err := strconv.ParseBool(os.Getenv("PROD"))
-	if err != nil {
-		return nil, err
-	}
-
+func Init() *Config {
 	return &Config{
-		DbName:     os.Getenv("DB_NAME"),
-		DbHost:     os.Getenv("DB_HOST"),
-		DbUsername: os.Getenv("DB_USER"),
-		DbPort:     dbPort,
-		DbPassword: os.Getenv("DB_PASSWORD"),
+		DBName:     os.Getenv("PG_NAME"),
+		DBHost:     os.Getenv("PG_HOST"),
+		DBUsername: os.Getenv("PG_USER"),
+		DBPort:     os.Getenv("PG_PORT"),
+		DBPassword: os.Getenv("PG_PASS"),
 
-		Port: port,
-		Prod: prod,
-	}, nil
+		Port: os.Getenv("PORT"),
+	}
 }

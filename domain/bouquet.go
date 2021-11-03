@@ -17,11 +17,11 @@ var GqlBouquet = graphql.NewObject(
 	graphql.ObjectConfig{
 		Name: "Bouquet",
 		Fields: graphql.Fields{
-			"id":       {Type: graphql.ID},
+			"id":       {Type: graphql.Int},
 			"name":     {Type: graphql.String},
 			"price":    {Type: graphql.Float},
 			"photoUrl": {Type: graphql.String},
-			"sellerId": {Type: graphql.ID},
+			"sellerId": {Type: graphql.Int},
 		},
 	},
 )
@@ -30,44 +30,20 @@ type BouquetDto struct {
 	ID       uint       `json:"id"`
 	Name     string     `json:"name"`
 	Price    float64    `json:"price"`
-	PhotoUrl string     `json:"photo_url"`
+	PhotoUrl string     `json:"photoUrl"`
 	Seller   *SellerDto `json:"seller"`
 }
-
-var GqlCreateBouquetDto = graphql.NewObject(
-	graphql.ObjectConfig{
-		Name: "CreateBouquetDto",
-		Fields: graphql.Fields{
-			"name":     {Type: graphql.String},
-			"price":    {Type: graphql.Float},
-			"photoUrl": {Type: graphql.String},
-			"sellerId": {Type: graphql.ID},
-		},
-	},
-)
 
 type CreateBouquetDto struct {
 	Name     string  `json:"name"`
 	Price    float64 `json:"price"`
-	PhotoUrl string  `json:"photo_url"`
-	SellerId uint    `json:"seller_id"`
+	PhotoUrl string  `json:"photoUrl"`
+	SellerId uint    `json:"sellerId"`
 }
-
-var GqlUpdateBouquetDto = graphql.NewObject(
-	graphql.ObjectConfig{
-		Name: "UpdateBouquetDto",
-		Fields: graphql.Fields{
-			"id":       {Type: graphql.ID},
-			"name":     {Type: graphql.String},
-			"price":    {Type: graphql.Float},
-			"photoUrl": {Type: graphql.String},
-		},
-	},
-)
 
 type UpdateBouquetDto struct {
 	ID       uint    `json:"id"`
 	Name     string  `json:"name,omitempty"`
 	Price    float64 `json:"price,omitempty"`
-	PhotoUrl string  `json:"photo_url,omitempty"`
+	PhotoUrl string  `json:"photoUrl,omitempty"`
 }

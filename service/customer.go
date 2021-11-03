@@ -7,7 +7,7 @@ import (
 )
 
 type CustomerServ struct {
-	r *repository.Repository
+	repository *repository.Repository
 }
 
 func newCustomerService(r *repository.Repository) *CustomerServ {
@@ -15,7 +15,7 @@ func newCustomerService(r *repository.Repository) *CustomerServ {
 }
 
 func (c CustomerServ) GetById(id uint) (domain.CustomerDto, error) {
-	model, err := c.r.Customer.FindById(id)
+	model, err := c.repository.Customer.FindById(id)
 	if err != nil {
 		return domain.CustomerDto{}, err
 	}
@@ -32,7 +32,7 @@ func (c CustomerServ) Create(dto domain.CreateCustomerDto) (domain.CustomerDto, 
 		Purchases: []domain.PurchaseModel{},
 	}
 
-	err := c.r.Customer.Insert(&model)
+	err := c.repository.Customer.Insert(&model)
 	if err != nil {
 		return domain.CustomerDto{}, nil
 	}
@@ -43,7 +43,7 @@ func (c CustomerServ) Create(dto domain.CreateCustomerDto) (domain.CustomerDto, 
 }
 
 func (c CustomerServ) Update(dto domain.UpdateCustomerDto) (domain.CustomerDto, error) {
-	model, err := c.r.Customer.FindById(dto.ID)
+	model, err := c.repository.Customer.FindById(dto.ID)
 	if err != nil {
 		return domain.CustomerDto{}, err
 	}
@@ -59,10 +59,9 @@ func (c CustomerServ) Update(dto domain.UpdateCustomerDto) (domain.CustomerDto, 
 		return domain.CustomerDto{}, err
 	}
 
-	return res, c.r.Customer.Update(model)
+	return res, c.repository.Customer.Update(model)
 }
 
 func (c CustomerServ) Delete(id uint) error {
-	return c.r.Customer.Delete(id)
+	return c.repository.Customer.Delete(id)
 }
-

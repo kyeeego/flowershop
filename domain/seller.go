@@ -18,7 +18,7 @@ var GqlSeller = graphql.NewObject(
 	graphql.ObjectConfig{
 		Name: "Seller",
 		Fields: graphql.Fields{
-			"id":           {Type: graphql.ID},
+			"id":           {Type: graphql.Int},
 			"shopName":     {Type: graphql.String},
 			"photoUrl":     {Type: graphql.String},
 			"createdDate":  {Type: graphql.Int},
@@ -30,41 +30,20 @@ var GqlSeller = graphql.NewObject(
 
 type SellerDto struct {
 	ID           uint          `json:"id"`
-	ShopName     string        `json:"shop_name"`
-	PhotoUrl     string        `json:"photo_url"`
-	CreatedDate  *time.Time    `json:"created_date"`
+	ShopName     string        `json:"shopName"`
+	PhotoUrl     string        `json:"photoUrl"`
+	CreatedDate  *time.Time    `json:"createdDate"`
 	Bouquets     []*BouquetDto `json:"bouquets"`
-	SoldBouquets int           `json:"sold_bouquets"`
+	SoldBouquets int           `json:"soldBouquets"`
 }
-
-var GqlCreateSellerDto = graphql.NewObject(
-	graphql.ObjectConfig{
-		Name: "CreateSellerDto",
-		Fields: graphql.Fields{
-			"shopName": {Type: graphql.String},
-			"photoUrl": {Type: graphql.String},
-		},
-	},
-)
 
 type CreateSellerDto struct {
-	ShopName string `json:"shop_name"`
-	PhotoUrl string `json:"photo_url"`
+	ShopName string `json:"shopName"`
+	PhotoUrl string `json:"photoUrl"`
 }
-
-var GqlUpdateSellerDto = graphql.NewObject(
-	graphql.ObjectConfig{
-		Name: "UpdateSellerDto",
-		Fields: graphql.Fields{
-			"id":       {Type: graphql.ID},
-			"shopName": {Type: graphql.String},
-			"photoUrl": {Type: graphql.String},
-		},
-	},
-)
 
 type UpdateSellerDto struct {
 	ID       uint   `json:"id"`
-	ShopName string `json:"shop_name,omitempty"`
-	PhotoUrl string `json:"photo_url,omitempty"`
+	ShopName string `json:"shopName,omitempty"`
+	PhotoUrl string `json:"photoUrl,omitempty"`
 }

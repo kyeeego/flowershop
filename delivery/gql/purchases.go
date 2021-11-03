@@ -14,18 +14,18 @@ func (p *Purchase) initServices(serv *service.Service) {
 }
 
 func (p Purchase) ResolveAll(params graphql.ResolveParams) (interface{}, error) {
-	customerId, ok := params.Args["id"].(uint)
+	customerId, ok := params.Args["id"].(int)
 	if !ok {
 		return nil, errors.New("invalid id argument")
 	}
 
-	return p.service.Purchase.GetAll(customerId)
+	return p.service.Purchase.GetAll(uint(customerId))
 }
 
 func (p Purchase) ResolvePurchaseBouquet(params graphql.ResolveParams) (interface{}, error) {
-	dto, ok := params.Args["in"].(domain.DoPurchaseDto)
-	if !ok {
-		return nil, errors.New("invalid in argument")
+	dto := domain.DoPurchaseDto{
+		CustomerID: uint(params.Args["customerId"].(int)),
+		BouquetID:  uint(params.Args["bouquetId"].(int)),
 	}
 
 	err := p.service.Purchase.Do(dto.CustomerID, dto.BouquetID)
@@ -40,7 +40,7 @@ func (p Purchase) initQueries() graphql.Fields {
 		"purchases": &graphql.Field{
 			Type: graphql.NewList(domain.GqlPurchase),
 			Args: graphql.FieldConfigArgument{
-				"id": &graphql.ArgumentConfig{Type: graphql.ID},
+				"id": &graphql.ArgumentConfig{Type: graphql.Int},
 			},
 			Resolve: p.ResolveAll,
 		},
@@ -52,7 +52,8 @@ func (p Purchase) initMutations() graphql.Fields {
 		"purchaseBouquet": &graphql.Field{
 			Type: graphql.Boolean,
 			Args: graphql.FieldConfigArgument{
-				"in": &graphql.ArgumentConfig{Type: domain.GqlDoPurchaseDto},
+				"customerId": {Type: graphql.Int},
+				"bouquetId":  {Type: graphql.Int},
 			},
 			Resolve: p.ResolvePurchaseBouquet,
 		},

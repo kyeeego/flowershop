@@ -14,39 +14,40 @@ func (c *Customer) initServices(serv *service.Service) {
 }
 
 func (c Customer) ResolveOne(p graphql.ResolveParams) (interface{}, error) {
-	id, ok := p.Args["id"].(uint)
+	id, ok := p.Args["id"].(int)
 	if !ok {
 		return nil, errors.New("invalid id argument")
 	}
 
-	return c.service.Customer.GetById(id)
+	return c.service.Customer.GetById(uint(id))
 }
 
 func (c Customer) ResolveCreate(p graphql.ResolveParams) (interface{}, error) {
-	dto, ok := p.Args["in"].(domain.CreateCustomerDto)
-	if !ok {
-		return nil, errors.New("invalid in argument")
+	dto := domain.CreateCustomerDto{
+		Name:  p.Args["name"].(string),
+		Email: p.Args["email"].(string),
 	}
 
 	return c.service.Customer.Create(dto)
 }
 
 func (c Customer) ResolveUpdate(p graphql.ResolveParams) (interface{}, error) {
-	dto, ok := p.Args["in"].(domain.UpdateCustomerDto)
-	if !ok {
-		return nil, errors.New("invalid in argument")
+	dto := domain.UpdateCustomerDto{
+		ID:    uint(p.Args["id"].(int)),
+		Name:  p.Args["name"].(string),
+		Email: p.Args["email"].(string),
 	}
 
 	return c.service.Customer.Update(dto)
 }
 
 func (c Customer) ResolveDelete(p graphql.ResolveParams) (interface{}, error) {
-	id, ok := p.Args["id"].(uint)
+	id, ok := p.Args["id"].(int)
 	if !ok {
 		return nil, errors.New("invalid id argument")
 	}
 
-	err := c.service.Customer.Delete(id)
+	err := c.service.Customer.Delete(uint(id))
 	if err != nil {
 		return false, err
 	}
@@ -59,7 +60,7 @@ func (c Customer) initQueries() graphql.Fields {
 		"customer": &graphql.Field{
 			Type: domain.GqlCustomer,
 			Args: graphql.FieldConfigArgument{
-				"id": &graphql.ArgumentConfig{Type: graphql.ID},
+				"id": &graphql.ArgumentConfig{Type: graphql.Int},
 			},
 			Resolve: c.ResolveOne,
 		},
@@ -71,21 +72,24 @@ func (c Customer) initMutations() graphql.Fields {
 		"createCustomer": &graphql.Field{
 			Type: domain.GqlCustomer,
 			Args: graphql.FieldConfigArgument{
-				"in": &graphql.ArgumentConfig{Type: domain.GqlCreateCustomerDto},
+				"name":  {Type: graphql.String},
+				"email": {Type: graphql.String},
 			},
 			Resolve: c.ResolveCreate,
 		},
 		"updateCustomer": &graphql.Field{
 			Type: domain.GqlCustomer,
 			Args: graphql.FieldConfigArgument{
-				"in": &graphql.ArgumentConfig{Type: domain.GqlUpdateCustomerDto},
+				"id":    {Type: graphql.Int},
+				"name":  {Type: graphql.String},
+				"email": {Type: graphql.String},
 			},
 			Resolve: c.ResolveUpdate,
 		},
 		"deleteCustomer": &graphql.Field{
 			Type: graphql.Boolean,
 			Args: graphql.FieldConfigArgument{
-				"id": &graphql.ArgumentConfig{Type: graphql.ID},
+				"id": &graphql.ArgumentConfig{Type: graphql.Int},
 			},
 			Resolve: c.ResolveDelete,
 		},

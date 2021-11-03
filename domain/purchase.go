@@ -17,9 +17,9 @@ var GqlPurchase = graphql.NewObject(
 	graphql.ObjectConfig{
 		Name: "Purchase",
 		Fields: graphql.Fields{
-			"id":         {Type: graphql.ID},
-			"bouquetId":  {Type: graphql.ID},
-			"customerId": {Type: graphql.ID},
+			"id":         {Type: graphql.Int},
+			"bouquetId":  {Type: graphql.Int},
+			"customerId": {Type: graphql.Int},
 			"price":      {Type: graphql.Float},
 			"profit":     {Type: graphql.Float},
 		},
@@ -31,20 +31,10 @@ type PurchaseDto struct {
 	BouquetID  uint    `json:"bouquet"`
 	CustomerID uint    `json:"customer"`
 	Price      float64 `json:"price"`
-	Profit     float64 `json:"service_income"`
+	Profit     float64 `json:"profit"`
 }
 
-var GqlDoPurchaseDto = graphql.NewObject(
-	graphql.ObjectConfig{
-		Name: "DoPurchaseDto",
-		Fields: graphql.Fields{
-			"customerId": {Type: graphql.ID},
-			"bouquetId":  {Type: graphql.ID},
-		},
-	},
-)
-
 type DoPurchaseDto struct {
-	CustomerID uint `json:"customer_id"`
-	BouquetID  uint `json:"bouquet_id"`
+	CustomerID uint `json:"customerId"`
+	BouquetID  uint `json:"bouquetId"`
 }

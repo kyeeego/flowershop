@@ -14,12 +14,12 @@ func (s *Seller) initServices(serv *service.Service) {
 }
 
 func (s Seller) ResolveOne(p graphql.ResolveParams) (interface{}, error) {
-	id, ok := p.Args["id"].(uint)
+	id, ok := p.Args["id"].(int)
 	if !ok {
 		return nil, errors.New("invalid id argument")
 	}
 
-	return s.service.Seller.GetById(id)
+	return s.service.Seller.GetById(uint(id))
 }
 
 func (s Seller) ResolveAll(graphql.ResolveParams) (interface{}, error) {
@@ -27,30 +27,31 @@ func (s Seller) ResolveAll(graphql.ResolveParams) (interface{}, error) {
 }
 
 func (s Seller) ResolveCreate(p graphql.ResolveParams) (interface{}, error) {
-	dto, ok := p.Args["in"].(domain.CreateSellerDto)
-	if !ok {
-		return nil, errors.New("invalid in argument")
+	dto := domain.CreateSellerDto{
+		ShopName: p.Args["shopName"].(string),
+		PhotoUrl: p.Args["photoUrl"].(string),
 	}
 
 	return s.service.Seller.Create(dto)
 }
 
 func (s Seller) ResolveUpdate(p graphql.ResolveParams) (interface{}, error) {
-	dto, ok := p.Args["in"].(domain.UpdateSellerDto)
-	if !ok {
-		return nil, errors.New("invalid in argument")
+	dto := domain.UpdateSellerDto{
+		ID:       uint(p.Args["id"].(int)),
+		ShopName: p.Args["shopName"].(string),
+		PhotoUrl: p.Args["photoUrl"].(string),
 	}
 
 	return s.service.Seller.Update(dto)
 }
 
 func (s Seller) ResolveDelete(p graphql.ResolveParams) (interface{}, error) {
-	id, ok := p.Args["id"].(uint)
+	id, ok := p.Args["id"].(int)
 	if !ok {
 		return nil, errors.New("invalid id argument")
 	}
 
-	err := s.service.Seller.Delete(id)
+	err := s.service.Seller.Delete(uint(id))
 	if err != nil {
 		return false, err
 	}
@@ -63,7 +64,7 @@ func (s Seller) initQueries() graphql.Fields {
 		"seller": &graphql.Field{
 			Type: domain.GqlSeller,
 			Args: graphql.FieldConfigArgument{
-				"id": &graphql.ArgumentConfig{Type: graphql.ID},
+				"id": &graphql.ArgumentConfig{Type: graphql.Int},
 			},
 			Resolve: s.ResolveOne,
 		},
@@ -79,21 +80,24 @@ func (s Seller) initMutations() graphql.Fields {
 		"createSeller": &graphql.Field{
 			Type: domain.GqlSeller,
 			Args: graphql.FieldConfigArgument{
-				"in": &graphql.ArgumentConfig{Type: domain.GqlCreateSellerDto},
+				"shopName": {Type: graphql.String},
+				"photoUrl": {Type: graphql.String},
 			},
 			Resolve: s.ResolveCreate,
 		},
 		"updateSeller": &graphql.Field{
 			Type: domain.GqlSeller,
 			Args: graphql.FieldConfigArgument{
-				"in": &graphql.ArgumentConfig{Type: domain.GqlUpdateSellerDto},
+				"id":       {Type: graphql.Int},
+				"shopName": {Type: graphql.String},
+				"photoUrl": {Type: graphql.String},
 			},
 			Resolve: s.ResolveUpdate,
 		},
 		"deleteSeller": &graphql.Field{
 			Type: graphql.Boolean,
 			Args: graphql.FieldConfigArgument{
-				"id": &graphql.ArgumentConfig{Type: graphql.ID},
+				"id": &graphql.ArgumentConfig{Type: graphql.Int},
 			},
 			Resolve: s.ResolveDelete,
 		},

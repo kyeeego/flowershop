@@ -16,7 +16,7 @@ var GqlCustomer = graphql.NewObject(
 	graphql.ObjectConfig{
 		Name: "Customer",
 		Fields: graphql.Fields{
-			"id":        {Type: graphql.ID},
+			"id":        {Type: graphql.Int},
 			"name":      {Type: graphql.String},
 			"email":     {Type: graphql.String},
 			"purchases": {Type: graphql.NewList(GqlPurchase)},
@@ -31,31 +31,10 @@ type CustomerDto struct {
 	Purchases []PurchaseDto `json:"purchases" copier:"must"`
 }
 
-var GqlCreateCustomerDto = graphql.NewObject(
-	graphql.ObjectConfig{
-		Name: "CreateCustomerDto",
-		Fields: graphql.Fields{
-			"name":  {Type: graphql.String},
-			"email": {Type: graphql.String},
-		},
-	},
-)
-
 type CreateCustomerDto struct {
 	Name  string `json:"name"`
 	Email string `json:"email"`
 }
-
-var GqlUpdateCustomerDto = graphql.NewObject(
-	graphql.ObjectConfig{
-		Name: "UpdateCustomerDto",
-		Fields: graphql.Fields{
-			"id":    {Type: graphql.ID},
-			"name":  {Type: graphql.String},
-			"email": {Type: graphql.String},
-		},
-	},
-)
 
 type UpdateCustomerDto struct {
 	ID    uint   `json:"id"`

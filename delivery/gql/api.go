@@ -23,10 +23,10 @@ func New(service *service.Service, endpoints ...Endpoint) (*Api, error) {
 	queries := graphql.Fields{}
 	mutations := graphql.Fields{}
 	for _, e := range endpoints {
+		e.initServices(service)
+
 		eq := e.initQueries()
 		em := e.initMutations()
-
-		e.initServices(service)
 
 		queries = utils.MergeGqlFieldMaps(queries, eq)
 		mutations = utils.MergeGqlFieldMaps(mutations, em)

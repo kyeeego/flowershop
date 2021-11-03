@@ -7,7 +7,7 @@ import (
 )
 
 type PurchaseServ struct {
-	r *repository.Repository
+	repository *repository.Repository
 }
 
 func newPurchaseService(r *repository.Repository) *PurchaseServ {
@@ -16,7 +16,7 @@ func newPurchaseService(r *repository.Repository) *PurchaseServ {
 
 func (s PurchaseServ) GetAll(customerId uint) ([]domain.PurchaseDto, error) {
 	var dtos []domain.PurchaseDto
-	models, err := s.r.Purchase.FindByCustomerId(customerId)
+	models, err := s.repository.Purchase.FindByCustomerId(customerId)
 	if err != nil {
 		return nil, err
 	}
@@ -27,7 +27,7 @@ func (s PurchaseServ) GetAll(customerId uint) ([]domain.PurchaseDto, error) {
 }
 
 func (s PurchaseServ) Do(customerId, bouquetId uint) error {
-	bouquet, err := s.r.Bouquet.FindById(bouquetId)
+	bouquet, err := s.repository.Bouquet.FindById(bouquetId)
 	if err != nil {
 		return err
 	}
@@ -39,5 +39,5 @@ func (s PurchaseServ) Do(customerId, bouquetId uint) error {
 		Profit:     bouquet.Price * 0.3,
 	}
 
-	return s.r.Purchase.Insert(&model)
+	return s.repository.Purchase.Insert(&model)
 }

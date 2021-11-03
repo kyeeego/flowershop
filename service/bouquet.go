@@ -7,7 +7,7 @@ import (
 )
 
 type BouquetServ struct {
-	r *repository.Repository
+	repository *repository.Repository
 }
 
 func newBouquetService(r *repository.Repository) *BouquetServ {
@@ -15,7 +15,7 @@ func newBouquetService(r *repository.Repository) *BouquetServ {
 }
 
 func (s BouquetServ) GetById(id uint) (domain.BouquetDto, error) {
-	model, err := s.r.Bouquet.FindById(id)
+	model, err := s.repository.Bouquet.FindById(id)
 	if err != nil {
 		return domain.BouquetDto{}, err
 	}
@@ -27,7 +27,7 @@ func (s BouquetServ) GetById(id uint) (domain.BouquetDto, error) {
 
 func (s BouquetServ) GetAll() ([]domain.BouquetDto, error) {
 	var dtos []domain.BouquetDto
-	models, err := s.r.Bouquet.FindAll()
+	models, err := s.repository.Bouquet.FindAll()
 	if err != nil {
 		return nil, err
 	}
@@ -45,7 +45,7 @@ func (s BouquetServ) Create(dto domain.CreateBouquetDto) (domain.BouquetDto, err
 		SellerId: dto.SellerId,
 	}
 
-	err := s.r.Bouquet.Insert(&model)
+	err := s.repository.Bouquet.Insert(&model)
 	if err != nil {
 		return domain.BouquetDto{}, nil
 	}
@@ -56,7 +56,7 @@ func (s BouquetServ) Create(dto domain.CreateBouquetDto) (domain.BouquetDto, err
 }
 
 func (s BouquetServ) Update(dto domain.UpdateBouquetDto) (domain.BouquetDto, error) {
-	model, err := s.r.Bouquet.FindById(dto.ID)
+	model, err := s.repository.Bouquet.FindById(dto.ID)
 	if err != nil {
 		return domain.BouquetDto{}, err
 	}
@@ -72,9 +72,9 @@ func (s BouquetServ) Update(dto domain.UpdateBouquetDto) (domain.BouquetDto, err
 		return domain.BouquetDto{}, err
 	}
 
-	return res, s.r.Bouquet.Update(model)
+	return res, s.repository.Bouquet.Update(model)
 }
 
 func (s BouquetServ) Delete(id uint) error {
-	return s.r.Seller.Delete(id)
+	return s.repository.Seller.Delete(id)
 }
